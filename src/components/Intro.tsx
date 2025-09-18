@@ -1,8 +1,11 @@
+'use client'
+
 import Link from 'next/link'
 
 import { IconLink } from '@/components/IconLink'
 import { Logo } from '@/components/Logo'
 import { SignUpForm } from '@/components/SignUpForm'
+import { usePathname } from 'next/navigation'
 
 function BookIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -48,7 +51,66 @@ function XIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
+/**
+ * 产品配置接口
+ */
+interface Product {
+  id: string
+  name: string
+  displayName: string
+  helpUrl?: string
+  changelogUrl?: string
+}
+
+/**
+ * 产品配置数据
+ */
+const PRODUCT_CONFIG: Record<string, Product> = {
+  forguncy: {
+    id: 'forguncy',
+    name: 'forguncy',
+    displayName: '活字格',
+    helpUrl: 'https://www.grapecity.com.cn/solutions/huozige/help/docs/overview',
+    changelogUrl: 'https://gcdn.grapecity.com.cn/showtopic-157560-1-1.html'
+  },
+  wyn: {
+    id: 'wyn',
+    name: 'wyn',
+    displayName: 'Wyn 商业智能',
+    helpUrl: 'https://www.grapecity.com.cn/solutions/wyn/help/docs/index',
+    changelogUrl: 'https://gcdn.grapecity.com.cn/showtopic-236342-1-1.html'
+  }
+}
+
+/**
+ * 从路径中解析产品信息
+ * @param pathname - 当前路径
+ * @returns 产品配置信息
+ */
+function getProductFromPath(pathname: string): Product {
+  // 如果是首页，返回默认产品
+  if (pathname === '/') {
+    return PRODUCT_CONFIG.forguncy
+  }
+
+  // 解析路径格式: /productId/versionId
+  const pathParts = pathname.split('/').filter(Boolean)
+  if (pathParts.length >= 1) {
+    const productId = pathParts[0]
+    const product = PRODUCT_CONFIG[productId]
+    if (product) {
+      return product
+    }
+  }
+
+  // 默认返回活字格
+  return PRODUCT_CONFIG.forguncy
+}
+
+
 export function Intro() {
+  const pathname = usePathname()
+  const currentProduct = getProductFromPath(pathname)
   return (
     <>
       <div>
@@ -57,21 +119,21 @@ export function Intro() {
         </Link>
       </div>
       <h1 className="mt-14 font-display text-4xl/tight font-light text-white">
-        活字格记录薄📝{' '}
+        葡萄城产品 Log 📝{' '}
         <span className="text-sky-300">版本迭代，尽在掌握​</span>
       </h1>
       <p className="mt-4 text-sm/6 text-gray-300">
         在这里，您可以查看 {' '}
-        <span className="text-sky-300">活字格</span>
+        <span className="text-sky-300">葡萄城所有产品</span>
         {' '}
         每个版本的最新变化。我们去除了冗余的技术细节，聚焦在产品功能上，提供更加简洁且清晰的更新说明，帮助您轻松掌握最新功能与差异点，了解每一次变化带来的业务价值。
       </p>
       <SignUpForm />
       <div className="mt-8 flex flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-x-2 lg:justify-start">
-        <IconLink href="#" icon={BookIcon} className="flex-none">
+        <IconLink href={currentProduct.helpUrl || "#"} icon={BookIcon} className="flex-none">
           帮助手册
         </IconLink>
-        <IconLink href="https://gcdn.grapecity.com.cn/showtopic-157560-1-1.html" icon={ChangeLogIcon} className="flex-none">
+        <IconLink href={currentProduct.changelogUrl || "#"} icon={ChangeLogIcon} className="flex-none">
           产品变更细节
         </IconLink>
         <IconLink href="/feed.xml" icon={FeedIcon} className="flex-none">
