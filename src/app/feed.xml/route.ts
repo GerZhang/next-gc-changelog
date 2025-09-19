@@ -3,6 +3,10 @@ import * as cheerio from 'cheerio'
 import { Feed } from 'feed'
 
 export async function GET(req: Request) {
+  /**
+   * RSS 路由处理器
+   * 新增：当页面未提供 <time>（日期）元素时，使用当前时间作为兜底，避免报错
+   */
   let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
 
   if (!siteUrl) {
@@ -47,7 +51,8 @@ export async function GET(req: Request) {
     let content = $(this).find('[data-mdx-content]').first().html()
 
     assert(typeof title === 'string')
-    assert(typeof date === 'string')
+    // 允许缺失日期，使用当前时间兜底
+    const finalDate = typeof date === 'string' ? date : new Date().toISOString()
     assert(typeof content === 'string')
 
     feed.addItem({
@@ -57,7 +62,7 @@ export async function GET(req: Request) {
       content,
       author: [author],
       contributor: [author],
-      date: new Date(date),
+      date: new Date(finalDate),
     })
   })
 

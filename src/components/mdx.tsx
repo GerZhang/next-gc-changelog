@@ -7,6 +7,7 @@ import clsx from 'clsx'
 
 import { FormattedDate } from '@/components/FormattedDate'
 import { Button } from '@/components/Button'
+import { FeatureIcon, FixIcon, OptimizeIcon } from '@/components/LableIcons'
 
 export const a = Link
 
@@ -44,25 +45,106 @@ function ContentWrapper({
   )
 }
 
-function ArticleHeader({ id, date }: { id: string; date: string | Date }) {
+function ArticleHeader({
+  id,
+  date,
+  type,
+  typeText,
+}: {
+  id: string
+  date?: string | Date
+  type?: 'feature' | 'fix' | 'optimize'
+  typeText?: string
+}) {
+  /**
+   * 标签类型配置映射表
+   * 包含每种类型的图标组件和样式配置
+   */
+  const tagConfigs = {
+    feature: {
+      icon: FeatureIcon,
+      styles: {
+        text: 'text-emerald-700 dark:text-emerald-300',
+        bg: 'bg-emerald-100 dark:bg-emerald-500/10'
+      }
+    },
+    fix: {
+      icon: FixIcon,
+      styles: {
+        text: 'text-violet-700 dark:text-violet-300',
+        bg: 'bg-violet-100 dark:bg-violet-500/10'
+      }
+    },
+    optimize: {
+      icon: OptimizeIcon,
+      styles: {
+        text: 'text-pink-700 dark:text-pink-300',
+        bg: 'bg-pink-100 dark:bg-pink-500/10'
+      }
+    }
+  } as const
+
+  /**
+   * 获取标签配置信息
+   * @param tagType 标签类型
+   * @returns 包含图标和样式的配置对象，如果类型不存在则返回 null
+   */
+  function getTagConfig(tagType: 'feature' | 'fix' | 'optimize') {
+    return tagConfigs[tagType] || null
+  }
+
+  // 获取当前类型的配置
+  const tagConfig = type ? getTagConfig(type) : null
+  const TagIcon = tagConfig?.icon || null
+  const tagStyles = tagConfig?.styles || null
+  const tagText = typeText ?? ''
+
   return (
     <header className="relative mb-10 xl:mb-0">
       <div className="pointer-events-none absolute top-0 left-[max(-0.5rem,calc(50%-18.625rem))] z-50 flex h-4 items-center justify-end gap-x-2 lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:left-0 lg:min-w-lg xl:h-8">
         <Link href={`#${id}`} className="inline-flex">
-          <FormattedDate
-            date={date}
-            className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-white/50"
-          />
+          {type && tagStyles ? (
+            <span
+              className={clsx(
+                'hidden xl:pointer-events-auto xl:inline-flex xl:items-center xl:gap-x-1 xl:text-2xs/4 xl:font-medium',
+                tagStyles.text,
+                tagStyles.bg,
+                'px-2 py-0.5 rounded',
+              )}
+            >
+              {TagIcon ? <TagIcon className="h-3 w-3" aria-hidden="true" /> : null}
+              <span>{tagText}</span>
+            </span>
+          ) : date ? (
+            <FormattedDate
+              date={date}
+              className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-white/50"
+            />
+          ) : null}
         </Link>
         <div className="h-0.25 w-3.5 bg-gray-400 lg:-mr-3.5 xl:mr-0 xl:bg-gray-300" />
       </div>
       <ContentWrapper>
         <div className="flex">
           <Link href={`#${id}`} className="inline-flex">
-            <FormattedDate
-              date={date}
-              className="text-2xs/4 font-medium text-gray-500 xl:hidden dark:text-white/50"
-            />
+            {type && tagStyles ? (
+              <span
+                className={clsx(
+                  'inline-flex items-center gap-x-1 text-2xs/4 font-medium xl:hidden',
+                  tagStyles.text,
+                  tagStyles.bg,
+                  'px-2 py-0.5 rounded',
+                )}
+              >
+                {TagIcon ? <TagIcon className="h-3 w-3" aria-hidden="true" /> : null}
+                <span>{tagText}</span>
+              </span>
+            ) : date ? (
+              <FormattedDate
+                date={date}
+                className="text-2xs/4 font-medium text-gray-500 xl:hidden dark:text-white/50"
+              />
+            ) : null}
           </Link>
         </div>
       </ContentWrapper>
@@ -73,10 +155,14 @@ function ArticleHeader({ id, date }: { id: string; date: string | Date }) {
 export const article = function Article({
   id,
   date,
+  type,
+  typeText,
   children,
 }: {
   id: string
-  date: string | Date
+  date?: string | Date
+  type?: 'feature' | 'fix' | 'optimize'
+  typeText?: string
   children: React.ReactNode
 }) {
   let heightRef = useRef<React.ComponentRef<'div'>>(null)
@@ -110,7 +196,7 @@ export const article = function Article({
       style={{ paddingBottom: `${heightAdjustment}px` }}
     >
       <div ref={heightRef}>
-        <ArticleHeader id={id} date={date} />
+        <ArticleHeader id={id} date={date} type={type} typeText={typeText} />
         <ContentWrapper className="typography" data-mdx-content>
           {children}
         </ContentWrapper>

@@ -1,4 +1,5 @@
 import { IconLink } from '@/components/IconLink'
+import { SparkleIcon } from '@/components/SparkleIcon'
 import { StarField } from '@/components/StarField'
 
 export default function NotFound() {
@@ -26,7 +27,7 @@ export default function NotFound() {
       <p className="mt-2 text-sm/6 text-gray-300">
         抱歉，我们找不到您要查找的页面。
       </p>
-      <IconLink href="/" className="mt-4">
+      <IconLink href="/" icon={SparkleIcon} className="mt-4">
         返回主页
       </IconLink>
     </div>
