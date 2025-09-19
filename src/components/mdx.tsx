@@ -66,21 +66,24 @@ function ArticleHeader({
       styles: {
         text: 'text-emerald-700 dark:text-emerald-300',
         bg: 'bg-emerald-100 dark:bg-emerald-500/10'
-      }
+      },
+      prefix: '新特性',
     },
     fix: {
       icon: FixIcon,
       styles: {
         text: 'text-violet-700 dark:text-violet-300',
         bg: 'bg-violet-100 dark:bg-violet-500/10'
-      }
+      },
+      prefix: '修复',
     },
     optimize: {
       icon: OptimizeIcon,
       styles: {
         text: 'text-pink-700 dark:text-pink-300',
         bg: 'bg-pink-100 dark:bg-pink-500/10'
-      }
+      },
+      prefix: '优化',
     }
   } as const
 
@@ -97,7 +100,11 @@ function ArticleHeader({
   const tagConfig = type ? getTagConfig(type) : null
   const TagIcon = tagConfig?.icon || null
   const tagStyles = tagConfig?.styles || null
-  const tagText = typeText ?? ''
+
+  const userText = typeText ?? ''
+  const tagText = userText
+    ? `${tagConfig?.prefix}-${userText}`
+    : (tagConfig?.prefix || '')
 
   return (
     <header className="relative mb-10 xl:mb-0">
