@@ -5,6 +5,8 @@ import clsx from 'clsx'
 
 import { Providers } from '@/app/providers'
 
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 import '@/styles/tailwind.css'
 
 const inter = Inter({
@@ -43,7 +45,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-white dark:bg-gray-950">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <SpeedInsights />
+        </Providers>
       </body>
     </html>
   )
