@@ -10,12 +10,6 @@ Next FGC Commit 是一个使用 [Tailwind CSS](https://tailwindcss.com) 和 [Nex
 npm install
 ```
 
-接下来，在项目根目录创建一个 `.env.local` 文件，并设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你网站的公共 URL：
-
-```
-NEXT_PUBLIC_SITE_URL=https://example.com
-```
-
 然后启动开发服务器：
 
 ```bash
@@ -42,33 +36,30 @@ npm run dev
 
 ### 添加更新日志条目
 
-所有更新日志条目都存储在一个大的 `./src/app/page.mdx` 文件中。该策略受到项目通常维护纯文本 `CHANGELOG` 文件方式的启发。
+每个产品的更新条目都会存储在对应产品版本的目录下： `./src/app/[product]/[version]/page.mdx` 文件中。该路由遵循 Next 的静态路径策略。
 
-每个更新日志条目应该用水平线（`---`）分隔，并应包含一个带有日期的 `<h2>`，指定为 [MDX 注释](https://github.com/bradlc/mdx-annotations)：
+每个更新日志条目应该用水平线（`---`）分隔，并应包含一个带有相关说明的 `<h2>`，指定为 [MDX 注释](https://github.com/bradlc/mdx-annotations)：
+
+系统支持的 MDX 注释标签：
+
+- `date`：指定更新日志条目的日期，格式为 `YYYY-MM-DDTHH:mm:ssZ`，该标签和 `type` 标签是重叠的，且优先级最高。因此推荐首个标题配置。
+- `type`：指定更新日志条目的类型，其值为确定的字典： `feature`、`optimize`、`fix`，分别对应新增、优化、修复场景。
+- `typeText`：指定更新日志条目的说明，例如 `AI`、`Web` 等，其内容可自定。
 
 ```md
 ---
 
 ![](@/images/your-screenshot.png)
 
-## 我的新更新日志条目 {{ date: '2023-04-06T00:00Z' }}
+## 首个标题 {{ date: '2023-04-06T00:00Z' }}
+
+你的内容...
+
+---
+## 首个标题 {{ type: 'feature', typeText: 'AI' }}
 
 你的内容...
 ```
-
-### 邮件订阅
-
-你可以在 `./src/components/SignUpForm.tsx` 中找到邮件订阅表单。
-
-如果需要变更邮件订阅服务，请自行调整该文件。
-
-### RSS 订阅
-
-该网站使用 [路由处理器](https://nextjs.org/docs/app/building-your-application/routing/router-handlers) 在运行时基于渲染的主页自动生成 RSS 订阅。
-
-你可以在 `./src/app/feed.xml/route.ts` 中编辑订阅的元数据（如标题和描述）。
-
-确保环境变量 `NEXT_PUBLIC_SITE_URL` 已正确设置，因为 RSS 订阅需要它来为每个条目生成正确的链接。
 
 ## 了解更多
 

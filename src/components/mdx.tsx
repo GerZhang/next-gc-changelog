@@ -8,8 +8,32 @@ import clsx from 'clsx'
 import { FormattedDate } from '@/components/FormattedDate'
 import { Button } from '@/components/Button'
 import { FeatureIcon, FixIcon, OptimizeIcon } from '@/components/LableIcons'
+import { ExternalLinkIcon } from '@/components/ExternalLinkIcon'
 
-export const a = Link
+
+/**
+ * MDX a 标签的自定义实现
+ * @param props a 标签的属性
+ * @returns 根据链接类型返回不同的组件
+ */
+export const a = (props: React.ComponentPropsWithoutRef<'a'>) => {
+  const { href, ...rest } = props
+
+  if (href && href.startsWith('http')) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
+        {props.children}
+        <ExternalLinkIcon />
+      </a>
+    )
+  }
+
+  if (href) {
+    return <Link href={href} {...rest} />
+  }
+
+  return <a {...props} />
+}
 
 type ImagePropsWithOptionalAlt = Omit<ImageProps, 'alt'> & { alt?: string }
 
@@ -72,16 +96,16 @@ function ArticleHeader({
     fix: {
       icon: FixIcon,
       styles: {
-        text: 'text-violet-700 dark:text-violet-300',
-        bg: 'bg-violet-100 dark:bg-violet-500/10'
+        text: 'text-pink-700 dark:text-pink-300',
+        bg: 'bg-pink-100 dark:bg-pink-500/10'
       },
       prefix: '修复',
     },
     optimize: {
       icon: OptimizeIcon,
       styles: {
-        text: 'text-pink-700 dark:text-pink-300',
-        bg: 'bg-pink-100 dark:bg-pink-500/10'
+        text: 'text-violet-700 dark:text-violet-300',
+        bg: 'bg-violet-100 dark:bg-violet-500/10'
       },
       prefix: '优化',
     }
