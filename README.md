@@ -1,6 +1,6 @@
-# Next FGC Commit
+# GC-ChangeLog
 
-Next FGC Commit 是一个使用 [Tailwind CSS](https://tailwindcss.com) 和 [Next.js](https://nextjs.org) 构建的文档说明网站，面向商务侧提供活字格每个版本的变更说明。
+GC-ChangeLog 是一个使用 [Tailwind CSS](https://tailwindcss.com) 和 [Next.js](https://nextjs.org) 构建的文档说明网站，面向商务侧提供葡萄城产品每个版本的变更说明。
 
 ## 快速开始
 
