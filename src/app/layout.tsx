@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { Providers } from '@/app/providers'
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from '@vercel/analytics/next';
 
 import '@/styles/tailwind.css'
 
@@ -48,6 +49,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <SpeedInsights />
+          <Analytics />
         </Providers>
       </body>
     </html>
