@@ -28,11 +28,26 @@ function FeatureIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
+/**
+ * 商业相关功能的图标组件
+ * @param props SVG 元素的属性
+ * @returns 商业图标 SVG 组件
+ */
+function BusinessIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" {...props}>
+      <path fillRule="evenodd" d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 .75.75v2.5A.75.75 0 0 1 14.25 6H13v7.25a.75.75 0 0 1-.75.75h-8.5A.75.75 0 0 1 3 13.25V6H1.75A.75.75 0 0 1 1 5.25v-2.5ZM4.5 6v6.5h7V6h-7ZM2.5 3.5v1h11v-1h-11Z" clipRule="evenodd" />
+      <path d="M6 8.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5A.75.75 0 0 1 6 8.25ZM6.75 10a.75.75 0 0 0 0 1.5h2.5a.75.75 0 0 0 0-1.5h-2.5Z" />
+    </svg>
+  )
+}
+
 // 创建图标集合
 const LabelIcons = {
   OptimizeIcon,
   FixIcon,
-  FeatureIcon
+  FeatureIcon,
+  BusinessIcon
 }
 
-export { OptimizeIcon, FixIcon, FeatureIcon, LabelIcons }
+export { OptimizeIcon, FixIcon, FeatureIcon, BusinessIcon, LabelIcons }

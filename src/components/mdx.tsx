@@ -7,7 +7,7 @@ import clsx from 'clsx'
 
 import { FormattedDate } from '@/components/FormattedDate'
 import { Button } from '@/components/Button'
-import { FeatureIcon, FixIcon, OptimizeIcon } from '@/components/LableIcons'
+import { FeatureIcon, FixIcon, OptimizeIcon, BusinessIcon } from '@/components/LableIcons'
 import { ExternalLinkIcon } from '@/components/ExternalLinkIcon'
 
 
@@ -17,11 +17,17 @@ import { ExternalLinkIcon } from '@/components/ExternalLinkIcon'
  * @returns 根据链接类型返回不同的组件
  */
 export const a = (props: React.ComponentPropsWithoutRef<'a'>) => {
-  const { href, ...rest } = props
+  const { href, className, ...rest } = props
 
   if (href && href.startsWith('http')) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={clsx('no-underline', className)}
+        {...rest}
+      >
         {props.children}
         <ExternalLinkIcon />
       </a>
@@ -29,10 +35,10 @@ export const a = (props: React.ComponentPropsWithoutRef<'a'>) => {
   }
 
   if (href) {
-    return <Link href={href} {...rest} />
+    return <Link href={href} className={clsx('no-underline', className)} {...rest} />
   }
 
-  return <a {...props} />
+  return <a className={clsx('no-underline', className)} {...props} />
 }
 
 type ImagePropsWithOptionalAlt = Omit<ImageProps, 'alt'> & { alt?: string }
@@ -77,7 +83,7 @@ function ArticleHeader({
 }: {
   id: string
   date?: string | Date
-  type?: 'feature' | 'fix' | 'optimize'
+  type?: 'feature' | 'fix' | 'optimize' | 'business'
   typeText?: string
 }) {
   /**
@@ -108,6 +114,14 @@ function ArticleHeader({
         bg: 'bg-violet-100 dark:bg-violet-500/10'
       },
       prefix: '优化',
+    },
+    business: {
+      icon: BusinessIcon,
+      styles: {
+        text: 'text-blue-700 dark:text-blue-300',
+        bg: 'bg-blue-100 dark:bg-blue-500/10'
+      },
+      prefix: '商务',
     }
   } as const
 
@@ -116,7 +130,7 @@ function ArticleHeader({
    * @param tagType 标签类型
    * @returns 包含图标和样式的配置对象，如果类型不存在则返回 null
    */
-  function getTagConfig(tagType: 'feature' | 'fix' | 'optimize') {
+  function getTagConfig(tagType: 'feature' | 'fix' | 'optimize' | 'business') {
     return tagConfigs[tagType] || null
   }
 
@@ -192,7 +206,7 @@ export const article = function Article({
 }: {
   id: string
   date?: string | Date
-  type?: 'feature' | 'fix' | 'optimize'
+  type?: 'feature' | 'fix' | 'optimize' | 'business'
   typeText?: string
   children: React.ReactNode
 }) {
