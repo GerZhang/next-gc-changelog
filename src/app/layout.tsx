@@ -26,7 +26,7 @@ const monaSans = localFont({
 export const metadata: Metadata = {
   title: '产品功能更新说明 | 活字格​',
   description:
-    'Commit is a lightweight Git client you can open from anywhere any time you’re ready to commit your work with a single keyboard shortcut. It’s fast, beautiful, and completely unnecessary.',
+    'You can view the latest changes for each version of GrapeCity products. We have removed redundant technical details, focusing on product features, providing more concise and clear update descriptions to help you easily grasp the latest features and differences, and understand the business value brought by each change.',
   alternates: {
     types: {
       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
