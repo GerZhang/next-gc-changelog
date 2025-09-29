@@ -82,26 +82,26 @@ const PRODUCTS: Product[] = [
  * @returns 解析出的产品和版本信息
  */
 function parsePathname(pathname: string): { product: Product | null, version: Version | null } {
-  // 如果是首页，返回默认值
+  // 如果是首页，返回默认产品但版本为空
   if (pathname === '/') {
-    return { product: PRODUCTS[0], version: PRODUCTS[0].versions[0] }
+    return { product: PRODUCTS[0], version: null }
   }
 
   // 解析路径格式: /productId/versionId
   const pathParts = pathname.split('/').filter(Boolean)
   if (pathParts.length !== 2) {
-    return { product: PRODUCTS[0], version: PRODUCTS[0].versions[0] }
+    return { product: PRODUCTS[0], version: null }
   }
 
   const [productId, versionId] = pathParts
   const product = PRODUCTS.find(p => p.id === productId)
   if (!product) {
-    return { product: PRODUCTS[0], version: PRODUCTS[0].versions[0] }
+    return { product: PRODUCTS[0], version: null }
   }
 
   const version = product.versions.find(v => v.id === versionId)
   if (!version) {
-    return { product, version: product.versions[0] }
+    return { product, version: null }
   }
 
   return { product, version }
@@ -119,7 +119,7 @@ export function SignUpForm() {
   const pathname = usePathname()
 
   const [selectedProduct, setSelectedProduct] = useState<Product>(PRODUCTS[0])
-  const [selectedVersion, setSelectedVersion] = useState<Version>(PRODUCTS[0].versions[0])
+  const [selectedVersion, setSelectedVersion] = useState<Version | null>(null)
   const [email, setEmail] = useState('')
 
   /**
@@ -127,9 +127,9 @@ export function SignUpForm() {
    */
   useEffect(() => {
     const { product, version } = parsePathname(pathname)
-    if (product && version) {
+    if (product) {
       setSelectedProduct(product)
-      setSelectedVersion(version)
+      setSelectedVersion(version) // 可能为 null
     }
   }, [pathname])
 
@@ -141,9 +141,7 @@ export function SignUpForm() {
     const product = PRODUCTS.find(p => p.id === event.target.value)
     if (product) {
       setSelectedProduct(product)
-      const defaultVersion = product.versions[0]
-      setSelectedVersion(defaultVersion)
-      router.push(defaultVersion.route)
+      setSelectedVersion(null) // 重置版本选择
     }
   }
 
@@ -152,7 +150,15 @@ export function SignUpForm() {
    * @param event - 选择事件
    */
   const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const version = selectedProduct.versions.find(v => v.id === event.target.value)
+    const versionId = event.target.value
+    if (!versionId) {
+      setSelectedVersion(null)
+      // 当选择"请选择版本"时，跳转到首页
+      router.push('/')
+      return
+    }
+
+    const version = selectedProduct.versions.find(v => v.id === versionId)
     if (version) {
       setSelectedVersion(version)
       router.push(version.route)
@@ -174,7 +180,7 @@ export function SignUpForm() {
     })
 
     // 如果当前不在选中的版本页面，则跳转
-    if (pathname !== selectedVersion.route) {
+    if (selectedVersion && pathname !== selectedVersion.route) {
       router.push(selectedVersion.route)
     }
   }
@@ -191,9 +197,6 @@ export function SignUpForm() {
             value={selectedProduct.id}
             onChange={handleProductChange}
           >
-            <option value="" disabled className="bg-gray-900 text-gray-400">
-              产品列表
-            </option>
             {PRODUCTS.map((product) => (
               <option
                 key={product.id}
@@ -212,11 +215,11 @@ export function SignUpForm() {
           </label>
           <Select
             id={versionId}
-            value={selectedVersion.id}
+            value={selectedVersion?.id || ''}
             onChange={handleVersionChange}
           >
-            <option value="" disabled className="bg-gray-900 text-gray-400">
-              版本列表
+            <option value="" className="bg-gray-900 text-gray-400">
+              请选择版本
             </option>
             {selectedProduct.versions.map((version) => (
               <option

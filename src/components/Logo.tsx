@@ -4,7 +4,7 @@ export function Logo(props: React.ComponentPropsWithoutRef<'svg'>) {
   let id = useId()
 
   return (
-    <svg viewBox="0 0 240 32" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 260 32" fill="none" aria-hidden="true" {...props}>
       <title>GC ChangeLog</title>
       <mask id={`${id}-m`} fill="#fff">
         <path
