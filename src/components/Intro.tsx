@@ -136,7 +136,7 @@ export function Intro() {
         每个版本的最新变化。我们去除了冗余的技术细节，聚焦在产品功能上，提供更加简洁且清晰的更新说明，帮助您轻松掌握最新功能与差异点，了解每一次变化带来的业务价值。
       </p>
       <SignUpForm />
-      <div className="mt-8 flex flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-x-2 lg:justify-start">
+      <div className="mt-8 flex flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-x-2">
         <IconLink href={currentProduct.helpUrl || "#"} icon={BookIcon} className="flex-none">
           帮助手册
         </IconLink>
