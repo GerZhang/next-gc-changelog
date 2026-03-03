@@ -263,4 +263,22 @@ export const code = function Code({
   return <code {...props} />
 }
 
+/**
+ * 自定义 h2 组件
+ * 过滤掉 MDX 注解属性（type, typeText, date），不传递给 DOM 元素
+ */
+export const h2 = function H2({
+  type,
+  typeText,
+  date,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<'h2'> & {
+  type?: 'feature' | 'fix' | 'optimize' | 'business'
+  typeText?: string
+  date?: string | Date
+}) {
+  return <h2 {...props}>{children}</h2>
+}
+
 export { Button }

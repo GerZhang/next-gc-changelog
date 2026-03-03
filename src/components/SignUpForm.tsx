@@ -38,6 +38,13 @@ const PRODUCTS: Product[] = [
     displayName: '活字格',
     versions: [
       {
+        id: 'v12.0',
+        name: 'v12.0',
+        displayName: 'V12.0',
+        releaseDate: '2026-04-30',
+        route: '/forguncy/v12.0',
+      },
+      {
         id: 'v11.1',
         name: 'v11.1',
         displayName: 'V11 Update 1',
